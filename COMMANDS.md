@@ -37,6 +37,25 @@ Start-Process cmd -ArgumentList "/k", "cd /d D:\Event-App\backend && node server
 Start-Process cmd -ArgumentList "/k", "cd /d D:\Event-App\frontend && npm start" -WindowStyle Normal
 ```
 
+## 🌐 Render Deployment Commands
+
+### Prepare for Render
+```bash
+# Update API URLs for Render
+node update-api-urls.js
+
+# Commit and push changes
+git add .
+git commit -m "Update API URLs for Render deployment"
+git push origin master
+```
+
+### Deploy to Render
+1. Go to [render.com](https://render.com)
+2. Connect GitHub repo
+3. Use `render.yaml` for auto-setup
+4. Or follow manual steps in `RENDER-SETUP.md`
+
 ## 🔑 Login Credentials
 
 **Admin Access:**
@@ -49,8 +68,14 @@ Start-Process cmd -ArgumentList "/k", "cd /d D:\Event-App\frontend && npm start"
 
 ## 📱 Access URLs
 
+### Local Development
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:5000
+- **Database**: MongoDB Atlas (eventapp)
+
+### After Render Deployment
+- **Frontend**: https://event-app-frontend.onrender.com
+- **Backend API**: https://event-app-backend.onrender.com
 - **Database**: MongoDB Atlas (eventapp)
 
 ## 🛠️ Troubleshooting Commands
@@ -80,6 +105,12 @@ cd D:\Event-App\backend
 node setup-atlas.js
 ```
 
+### Update API URLs for Render
+```bash
+# Switch localhost to Render URLs
+node update-api-urls.js
+```
+
 ## 📂 File Locations
 
 ```
@@ -90,6 +121,9 @@ D:\Event-App\
 │   └── .env              # Environment variables
 ├── frontend\
 │   └── package.json       # Frontend dependencies
+├── render.yaml           # Render configuration
+├── RENDER-SETUP.md      # Render deployment guide
+├── update-api-urls.js    # API URL updater
 ├── start-app.bat         # Quick start script
 └── COMMANDS.md           # This file
 ```
@@ -114,13 +148,25 @@ cd D:\Event-App\backend && node server.js && cd ..\frontend && npm start
 taskkill /F /IM node.exe && cd D:\Event-App\backend && node setup-atlas.js && node server.js
 ```
 
+### Deploy to Render
+```cmd
+node update-api-urls.js && git add . && git commit -m "Ready for Render" && git push origin master
+```
+
 ## 📋 Daily Workflow
 
+### Local Development
 1. **Open Command Prompt**
 2. **Run**: `D:\Event-App\start-app.bat`
 3. **Wait** for both servers to start
 4. **Open Browser**: http://localhost:3000
 5. **Login** with admin credentials
+
+### Render Deployment
+1. **Update URLs**: `node update-api-urls.js`
+2. **Commit changes**: `git add . && git commit -m "Deploy to Render"`
+3. **Push to GitHub**: `git push origin master`
+4. **Deploy on Render**: Auto-deploy or manual trigger
 
 ## 🆘 Common Issues
 
@@ -129,7 +175,7 @@ taskkill /F /IM node.exe && cd D:\Event-App\backend && node setup-atlas.js && no
 # Find process using port 5000
 netstat -ano | findstr :5000
 
-# Kill the process
+# Kill process
 taskkill /PID <PID_NUMBER> /F
 ```
 
@@ -149,6 +195,12 @@ npm install
 npm start
 ```
 
+### Render Deployment Issues
+- Check Render dashboard logs
+- Verify environment variables
+- Ensure MongoDB Atlas IP whitelist
+- Check CORS settings
+
 ---
 
-**🎯 Best Practice**: Use `start-app.bat` for the most reliable startup experience!
+**🎯 Best Practice**: Use `start-app.bat` for local development, `render.yaml` for deployment!
