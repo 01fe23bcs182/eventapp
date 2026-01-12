@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import './AdminBookings.css';
 
 const AdminBookings = () => {
@@ -12,7 +12,7 @@ const AdminBookings = () => {
 
     const fetchBookings = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/bookings/all');
+            const response = await api.get('/bookings/all');
             setBookings(response.data);
             setLoading(false);
         } catch (error) {
@@ -24,7 +24,7 @@ const AdminBookings = () => {
     const handleCancelBooking = async (bookingId) => {
         if (window.confirm('Are you sure you want to cancel this booking?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/bookings/${bookingId}`);
+                await api.delete(`/bookings/${bookingId}`);
                 fetchBookings();
             } catch (error) {
                 alert(error.response?.data?.message || 'Failed to cancel booking');

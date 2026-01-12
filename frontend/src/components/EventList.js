@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import './EventList.css';
 
 const EventList = () => {
@@ -12,7 +12,7 @@ const EventList = () => {
 
     const fetchEvents = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/events');
+            const response = await api.get('/events');
             setEvents(response.data);
             setLoading(false);
         } catch (error) {
@@ -23,7 +23,7 @@ const EventList = () => {
 
     const handleBookEvent = async (eventId) => {
         try {
-            await axios.post('http://localhost:5000/api/bookings', { eventId });
+            await api.post('/bookings', { eventId });
             alert('Event booked successfully!');
         } catch (error) {
             alert(error.response?.data?.message || 'Failed to book event');

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -21,7 +21,7 @@ const AdminDashboard = () => {
 
     const fetchEvents = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/events');
+            const response = await api.get('/events');
             setEvents(response.data);
         } catch (error) {
             console.error('Error fetching events:', error);
@@ -39,9 +39,9 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             if (editingEvent) {
-                await axios.put(`http://localhost:5000/api/events/${editingEvent._id}`, formData);
+                await api.put(`/events/${editingEvent._id}`, formData);
             } else {
-                await axios.post('http://localhost:5000/api/events', formData);
+                await api.post('/events', formData);
             }
             
             setFormData({
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
     const handleDelete = async (eventId) => {
         if (window.confirm('Are you sure you want to delete this event?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/events/${eventId}`);
+                await api.delete(`/events/${eventId}`);
                 fetchEvents();
             } catch (error) {
                 console.error('Error deleting event:', error);

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
 const AuthContext = createContext();
 
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             dispatch({ type: 'SET_LOADING', payload: false });
         } else {
             dispatch({ type: 'SET_LOADING', payload: false });
@@ -51,14 +51,14 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/login', {
+            const response = await api.post('/auth/login', {
                 email,
                 password
             });
 
             const { token, user } = response.data;
             localStorage.setItem('token', token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             dispatch({
                 type: 'LOGIN_SUCCESS',
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (username, email, password, role = 'user') => {
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/register', {
+            const response = await api.post('/auth/register', {
                 username,
                 email,
                 password,
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
 
             const { token, user } = response.data;
             localStorage.setItem('token', token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             dispatch({
                 type: 'LOGIN_SUCCESS',
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('token');
-        delete axios.defaults.headers.common['Authorization'];
+        delete api.defaults.headers.common['Authorization'];
         dispatch({ type: 'LOGOUT' });
     };
 
